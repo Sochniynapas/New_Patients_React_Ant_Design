@@ -7,3 +7,7 @@
 body{
     margin: 0;
 }
+.form{
+    background-color: #F7F6FC;
+    box-shadow: 0px 0px 8px 8px rgba(223, 223, 223, 0.6) 
+}
