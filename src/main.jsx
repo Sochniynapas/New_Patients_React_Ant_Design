@@ -5,6 +5,7 @@ import "./index.css"
 import { Provider } from "react-redux"
 import store from "./store/store.js"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import HeaderComponent from "./components/Header/Header.jsx"
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <Layout className="main">
+      <HeaderComponent />
       <RouterProvider router={router} />
     </Layout>
   </Provider>
