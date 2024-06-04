@@ -1,12 +1,10 @@
 import { Col, Menu, Row, Typography } from "antd"
 import { Header } from "antd/es/layout/layout"
-import { useSelector } from "react-redux"
-import { selectName } from "../../store/slice/authSlice"
+import { useNavigate } from "react-router-dom"
 
 const HeaderComponent = () => {
   const { Title, Link } = Typography
-  const name = useSelector(selectName)
-
+  const navigate = useNavigate()
   return (
     <Header
       style={{
@@ -14,7 +12,7 @@ const HeaderComponent = () => {
         marginBottom: "40px",
       }}
     >
-      <Row style={{ display: "flex", alignItems: "center" }} gutter={30}>
+      <Row align={"middle"} gutter={30}>
         <Col
           style={{
             backgroundImage: 'url("/src/assets/skull-svgrepo-com.svg")',
@@ -52,9 +50,9 @@ const HeaderComponent = () => {
 
         <Col style={{ marginLeft: "auto" }}>
           {localStorage.getItem("token") ? (
-            <Link style={{ color: "white" }}>{name}</Link>
+            <Link style={{ color: "white" }}>Aboba</Link>
           ) : (
-            <Link style={{ color: "white" }}>Войти</Link>
+            <Link onClick={()=>navigate("/login")} style={{ color: "white" }}>Войти</Link>
           )}
         </Col>
       </Row>

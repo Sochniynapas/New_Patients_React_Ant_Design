@@ -1,24 +1,25 @@
 import ReactDOM from "react-dom/client"
 import RegComponent from "./components/RegPage/Reg"
-import { Layout } from "antd"
-import "./index.css"
 import { Provider } from "react-redux"
 import store from "./store/store.js"
+import "./index.css"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
-import HeaderComponent from "./components/Header/Header.jsx"
+import Auth from "./components/Auth/Auth.jsx"
+import MainPage from "./MainPage.jsx"
 
 const router = createBrowserRouter([
   {
     path: '/register',
-    element: <RegComponent />
-  }
+    element: <MainPage children = {RegComponent} />
+  },
+  {
+    path: '/login',
+    element: <MainPage children = {Auth} />
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <Layout className="main">
-      <HeaderComponent />
       <RouterProvider router={router} />
-    </Layout>
   </Provider>
 )

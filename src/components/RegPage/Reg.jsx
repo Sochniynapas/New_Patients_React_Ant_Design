@@ -12,8 +12,6 @@ import Input from "antd/es/input/Input"
 import { useGetSpecialtiesListQuery, useRegisterNewUserMutation } from "../../api/userApi"
 import { useEffect, useState } from "react"
 import Password from "antd/es/input/Password"
-import {setName } from "../../store/slice/authSlice"
-import { useDispatch} from "react-redux"
 
 const RegComponent = () => {
   const { Title } = Typography
@@ -21,7 +19,6 @@ const RegComponent = () => {
   const { data: specialties } = useGetSpecialtiesListQuery({ name: searchText })
   const [specArray, setSpecArray] = useState([])
   const [userRegister] = useRegisterNewUserMutation()
-  const dispatch = useDispatch()
 
   const fillSpecialties = (specialties) => {
     const options = specialties.map((element) => ({
@@ -42,7 +39,6 @@ const RegComponent = () => {
     const response = await userRegister({body: formattedValues}).unwrap()
     if(response.token){
       localStorage.setItem('token', response.token)
-      dispatch(setName(formattedValues.name))
     }
   }
   const onFinishFailed = (errorInfo) => {

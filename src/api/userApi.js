@@ -17,6 +17,13 @@ export const userApi = createApi({
                 body: body
             })
         }),
+        authUser: build.mutation({
+            query: ({body}) => ({
+                url: 'api/doctor/login',
+                method: 'POST',
+                body: body
+            })
+        }),
         getSpecialtiesList: build.query({
             query:({name}) =>({
                 url: `api/dictionary/speciality?name=${name}&page=1&size=5`,
@@ -27,5 +34,6 @@ export const userApi = createApi({
 
 export const {
     useRegisterNewUserMutation,
-    useGetSpecialtiesListQuery
+    useGetSpecialtiesListQuery,
+    useAuthUserMutation
 } = userApi
