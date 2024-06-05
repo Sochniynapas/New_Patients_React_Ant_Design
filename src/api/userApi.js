@@ -24,6 +24,26 @@ export const userApi = createApi({
                 body: body
             })
         }),
+        editProfile: build.mutation({
+            query: ({body, token}) => ({
+                url: 'api/doctor/profile',
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: body
+            }),
+            invalidatesTags: [{ type: 'Profile', id: 'LIST' }]
+        }),
+        getProfile: build.query({
+            query: ({token}) => ({
+                url: 'api/doctor/profile',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }),
+            providesTags: (result, id) => [{ type: 'Profile', id: 'LIST' }]
+        }),
         getSpecialtiesList: build.query({
             query:({name}) =>({
                 url: `api/dictionary/speciality?name=${name}&page=1&size=5`,
@@ -35,5 +55,7 @@ export const userApi = createApi({
 export const {
     useRegisterNewUserMutation,
     useGetSpecialtiesListQuery,
-    useAuthUserMutation
+    useAuthUserMutation,
+    useGetProfileQuery,
+    useEditProfileMutation
 } = userApi

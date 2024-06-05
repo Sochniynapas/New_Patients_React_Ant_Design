@@ -9,9 +9,13 @@ import {
   Typography,
 } from "antd"
 import Input from "antd/es/input/Input"
-import { useGetSpecialtiesListQuery, useRegisterNewUserMutation } from "../../api/userApi"
+import {
+  useGetSpecialtiesListQuery,
+  useRegisterNewUserMutation,
+} from "../../api/userApi"
 import { useEffect, useState } from "react"
 import Password from "antd/es/input/Password"
+import { useNavigate } from "react-router-dom"
 
 const RegComponent = () => {
   const { Title } = Typography
@@ -19,6 +23,7 @@ const RegComponent = () => {
   const { data: specialties } = useGetSpecialtiesListQuery({ name: searchText })
   const [specArray, setSpecArray] = useState([])
   const [userRegister] = useRegisterNewUserMutation()
+  const navigate = useNavigate()
 
   const fillSpecialties = (specialties) => {
     const options = specialties.map((element) => ({
@@ -27,18 +32,18 @@ const RegComponent = () => {
     }))
     setSpecArray(options)
   }
-  const disableFutureDates = current => {
+  const disableFutureDates = (current) => {
     return current && new Date(current) >= new Date()
   }
-  const onFinish = async(values) => {
+  const onFinish = async (values) => {
     const formattedDate = values.birthday.toISOString()
     const formattedValues = {
       ...values,
       birthday: formattedDate,
     }
-    const response = await userRegister({body: formattedValues}).unwrap()
-    if(response.token){
-      localStorage.setItem('token', response.token)
+    const response = await userRegister({ body: formattedValues }).unwrap()
+    if (response.token) {
+      localStorage.setItem("token", response.token)
     }
   }
   const onFinishFailed = (errorInfo) => {
@@ -48,6 +53,10 @@ const RegComponent = () => {
     setSearchText(value)
   }
   useEffect(() => {
+    if(localStorage.getItem("token") !== null){
+      navigate("/profile")
+    }
+
     if (specialties) {
       fillSpecialties(specialties.specialties)
     }
@@ -87,22 +96,20 @@ const RegComponent = () => {
                     { required: true, message: "Выберите специальность" },
                   ]}
                 >
-                  {specArray && (
-                    <Select
-                      filterOption={false}
-                      options={[
-                        {
-                          value: "Male",
-                          label: "Мужской",
-                        },
-                        {
-                          value: "Female",
-                          label: "Женский",
-                        },
-                      ]}
-                      placeholder="Выберите пол"
-                    />
-                  )}
+                  <Select
+                    filterOption={false}
+                    options={[
+                      {
+                        value: "Male",
+                        label: "Мужской",
+                      },
+                      {
+                        value: "Female",
+                        label: "Женский",
+                      },
+                    ]}
+                    placeholder="Выберите пол"
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -112,7 +119,7 @@ const RegComponent = () => {
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                   rules={[
-                    { required: true, message: "Выберите дату рождения"},
+                    { required: true, message: "Выберите дату рождения" },
                   ]}
                 >
                   <DatePicker
@@ -138,9 +145,7 @@ const RegComponent = () => {
                 },
               ]}
             >
-              <Input
-                placeholder="+7 (xxx) xxx xx-xx"
-              />
+              <Input placeholder="+7 (xxx) xxx xx-xx" />
             </Form.Item>
             <Form.Item
               label="Специальность"
@@ -188,7 +193,8 @@ const RegComponent = () => {
                 {
                   required: true,
                   pattern: /^(?=.*\d).{6,}$/,
-                  message: "введите пароль, состоящий из 6 символов, минимум одной заглавной буквы и одной цифры",
+                  message:
+                    "введите пароль, состоящий из 6 символов, минимум одной заглавной буквы и одной цифры",
                 },
               ]}
             >

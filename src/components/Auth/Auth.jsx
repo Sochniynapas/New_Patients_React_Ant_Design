@@ -1,28 +1,38 @@
 import { Button, Card, Col, Form, Input, Row, Typography } from "antd"
 import Password from "antd/es/input/Password"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthUserMutation } from "../../api/userApi"
 
 const Auth = () => {
   const { Title, Text } = Typography
   const [error, setError] = useState(false)
-  const [userAuth] = useAuthUserMutation() 
+  const [userAuth] = useAuthUserMutation()
   const navigate = useNavigate()
-  const onFinish = async (values) => {
-    const response = await userAuth({ body: values }).unwrap()
-
-    if (response.token) {
-      localStorage.setItem("token", response.token)
+  const onFinish = async(values) => {
+    const response = await userAuth({ body: values })
+    if (response.data) {
+      localStorage.setItem("token", response.data.token)
+      navigate("/profile")
       setError(false)
-    }
-    else{
-        setError(true)
-    }
+    } else {
+      setError(true)
+    }   
   }
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo)
   }
+
+  const initialValues = {
+    email: "handiemurim@mail.ru",
+    password: "Sukanah1!"
+  }
+
+  useEffect(()=>{
+    if(localStorage.getItem("token") !== null){
+      navigate("/profile")
+    }
+  },[])
   return (
     <Row justify={"center"} align={"middle"}>
       <Col xl={8} md={12} xs={16}>
@@ -30,9 +40,7 @@ const Auth = () => {
           <Title style={{ marginTop: 0 }}>Вход</Title>
           <Form
             name="auth"
-            initialValues={{
-              remember: true,
-            }}
+            initialValues={initialValues}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -44,7 +52,9 @@ const Auth = () => {
               labelCol={{ span: 24 }}
               rules={[{ required: true, message: "Введите email" }]}
             >
-              <Input placeholder="name@example.com"></Input>
+              <Input
+                placeholder="name@example.com"
+              ></Input>
             </Form.Item>
             <Form.Item
               name="password"

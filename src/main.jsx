@@ -6,6 +6,7 @@ import "./index.css"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import Auth from "./components/Auth/Auth.jsx"
 import MainPage from "./MainPage.jsx"
+import Profile from "./components/Profile/Profile.jsx"
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <MainPage children = {Auth} />
+  },
+  {
+    path: '/profile',
+    element: <MainPage children = {Profile} />
   },
 ])
 

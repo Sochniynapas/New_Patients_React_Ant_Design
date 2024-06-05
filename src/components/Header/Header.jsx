@@ -1,10 +1,38 @@
-import { Col, Menu, Row, Typography } from "antd"
+import { DownOutlined } from "@ant-design/icons"
+import { Col, Dropdown, Menu, Row, Space, Typography } from "antd"
 import { Header } from "antd/es/layout/layout"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useGetProfileQuery } from "../../api/userApi"
+
+
 
 const HeaderComponent = () => {
-  const { Title, Link } = Typography
+  const { Title, Link, Text } = Typography
   const navigate = useNavigate()
+  const {data: profile} = useGetProfileQuery({token: localStorage.getItem("token")})
+  const [name, setName] = useState('')
+
+  const items = [
+    {
+      label: <a style={{color:"black"}} onClick={()=>navigate("/profile")}>Профиль</a>,
+      key: "0",
+    },
+    {
+      label: (
+        <a style={{color:"black"}} onClick={()=> {localStorage.clear(), navigate("/login")}}>
+          Выход
+        </a>
+      ),
+      key: "1",
+    },
+  ]
+
+  useEffect(()=>{
+    if(profile){
+      setName(profile.name)
+    }
+  },[])
   return (
     <Header
       style={{
@@ -43,16 +71,36 @@ const HeaderComponent = () => {
         {localStorage.getItem("token") && (
           <>
             <Col>
-              <Link style={{ color: "white" }}>Привет</Link>
+              <Link style={{ color: "white" }}>Пациенты</Link>
+            </Col>
+            <Col>
+              <Link style={{ color: "white" }}>Консультации</Link>
+            </Col>
+            <Col>
+              <Link style={{ color: "white" }}>Отчёты и статистика</Link>
             </Col>
           </>
         )}
 
         <Col style={{ marginLeft: "auto" }}>
-          {localStorage.getItem("token") ? (
-            <Link style={{ color: "white" }}>Aboba</Link>
+          {(localStorage.getItem("token")) ? (
+            <Dropdown
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Text style={{color:"white"}}>{name}</Text>
+                  <DownOutlined style={{color:"white"}}/>
+                </Space>
+              </a>
+            </Dropdown>
           ) : (
-            <Link onClick={()=>navigate("/login")} style={{ color: "white" }}>Войти</Link>
+            <Link onClick={() => navigate("/login")} style={{ color: "white" }}>
+              Войти
+            </Link>
           )}
         </Col>
       </Row>
