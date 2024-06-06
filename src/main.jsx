@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import Auth from "./components/Auth/Auth.jsx"
 import MainPage from "./MainPage.jsx"
 import Profile from "./components/Profile/Profile.jsx"
+import Patients from "./components/Patients/Patients.jsx"
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <MainPage children = {Profile} />
+  },
+  {
+    path: '/patients',
+    element: <MainPage children = {Patients} />
   },
 ])
 
