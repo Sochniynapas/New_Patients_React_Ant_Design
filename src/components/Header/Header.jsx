@@ -5,22 +5,31 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useGetProfileQuery } from "../../api/userApi"
 
-
-
 const HeaderComponent = () => {
   const { Title, Link, Text } = Typography
   const navigate = useNavigate()
-  const {data: profile} = useGetProfileQuery({token: localStorage.getItem("token")})
-  const [name, setName] = useState('')
+  const { data: profile, error: profileError } = useGetProfileQuery({
+    token: localStorage.getItem("token"),
+  })
+  const [name, setName] = useState("")
 
   const items = [
     {
-      label: <a style={{color:"black"}} onClick={()=>navigate("/profile")}>Профиль</a>,
+      label: (
+        <a style={{ color: "black" }} onClick={() => navigate("/profile")}>
+          Профиль
+        </a>
+      ),
       key: "0",
     },
     {
       label: (
-        <a style={{color:"black"}} onClick={()=> {localStorage.clear(), navigate("/login")}}>
+        <a
+          style={{ color: "black" }}
+          onClick={() => {
+            localStorage.clear(), navigate("/login")
+          }}
+        >
           Выход
         </a>
       ),
@@ -28,11 +37,16 @@ const HeaderComponent = () => {
     },
   ]
 
-  useEffect(()=>{
-    if(profile){
+  useEffect(() => {
+    if (profile) {
       setName(profile.name)
+    } else {
+      if (profileError && profileError.status === 401) {
+        localStorage.clear()
+        navigate("/login")
+      }
     }
-  },[])
+  }, [profile, profileError])
   return (
     <Header
       style={{
@@ -71,7 +85,12 @@ const HeaderComponent = () => {
         {localStorage.getItem("token") && (
           <>
             <Col>
-              <Link style={{ color: "white" }}>Пациенты</Link>
+              <Link
+                onClick={() => navigate("/patients")}
+                style={{ color: "white" }}
+              >
+                Пациенты
+              </Link>
             </Col>
             <Col>
               <Link style={{ color: "white" }}>Консультации</Link>
@@ -83,7 +102,7 @@ const HeaderComponent = () => {
         )}
 
         <Col style={{ marginLeft: "auto" }}>
-          {(localStorage.getItem("token")) ? (
+          {localStorage.getItem("token") ? (
             <Dropdown
               menu={{
                 items,
@@ -92,8 +111,8 @@ const HeaderComponent = () => {
             >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                  <Text style={{color:"white"}}>{name}</Text>
-                  <DownOutlined style={{color:"white"}}/>
+                  <Text style={{ color: "white" }}>{name}</Text>
+                  <DownOutlined style={{ color: "white" }} />
                 </Space>
               </a>
             </Dropdown>
