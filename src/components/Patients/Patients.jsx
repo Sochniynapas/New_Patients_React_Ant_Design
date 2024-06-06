@@ -10,6 +10,7 @@ import {
   Switch,
   Typography,
   Pagination,
+  Modal,
 } from "antd"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import {
@@ -21,6 +22,8 @@ import { useEffect, useState } from "react"
 import Patient from "./SinglePatientElement"
 import { useGetPatientsQuery } from "../../api/patientsApi"
 import { patientsListParams } from "../../helpers/navigate"
+import CrPatientModal from "./CreatePatientModal"
+import { UserAddOutlined } from "@ant-design/icons"
 
 const Patients = () => {
   const { Title } = Typography
@@ -28,6 +31,7 @@ const Patients = () => {
   const navigate = useNavigate()
 
   const conclusions = searchParams.getAll("conclusions")
+  const name = searchParams.get("name") || null
   const scheduledVisits = searchParams.get("scheduledVisits") === "true"
   const onlyMine = searchParams.get("onlyMine") === "true"
   const sorting = searchParams.get("sorting") || "NameAsc"
@@ -35,6 +39,7 @@ const Patients = () => {
   const size = parseInt(searchParams.get("size"), 10) || 5
 
   const initialValues = {
+    name: name,
     conclusions: conclusions,
     scheduledVisits: scheduledVisits,
     onlyMine: onlyMine,
@@ -56,6 +61,8 @@ const Patients = () => {
 
   const [hasError, setHasError] = useState(false)
   const [currentPage, setCurrentPage] = useState(page)
+  const [open, setOpen] = useState(false)
+
 
   const onFinish = async (values) => {
     const params = patientsListParams(
@@ -95,9 +102,10 @@ const Patients = () => {
     <Row justify={"center"} align={"middle"}>
       <Col xl={14} md={16} xs={20}>
         <Layout style={{ backgroundColor: "white" }}>
+          <CrPatientModal open={open} setOpen={setOpen}/>
           <Row justify={"space-between"} align={"middle"}>
             <Title>Пациенты</Title>
-            <Button type="primary">Регистрация нового пациента</Button>
+            <Button onClick={() => setOpen(true)} type="primary"><UserAddOutlined />Регистрация нового пациента</Button>
           </Row>
           <Card className="form">
             <Form

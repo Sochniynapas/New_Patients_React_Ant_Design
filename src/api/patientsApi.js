@@ -26,9 +26,21 @@ export const patientsApi = createApi({
             providesTags: (result, id) => [{ type: 'Patients', id: 'LIST' }]
 
         }),
+        createPatient: build.mutation({
+            query: ({token, data}) =>({
+                url: "api/patient",
+                method: "POST",
+                headers:{
+                    Authorization: `Bearer ${token}`
+                },
+                body: data
+            }),
+            invalidatesTags: [{ type: 'Patients', id: 'LIST' }]
+        })
     })
 })
 
 export const {
-    useGetPatientsQuery
+    useGetPatientsQuery,
+    useCreatePatientMutation
 } = patientsApi
