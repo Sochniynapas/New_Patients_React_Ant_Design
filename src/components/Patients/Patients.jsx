@@ -10,7 +10,6 @@ import {
   Switch,
   Typography,
   Pagination,
-  Modal,
 } from "antd"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import {

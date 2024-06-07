@@ -1,4 +1,12 @@
-const patientsListParams = (name, conclusions = [], sorting, scheduledVisits, onlyMine, page = 1, size = 5 ) => {
+const patientsListParams = (
+  name,
+  conclusions = [],
+  sorting,
+  scheduledVisits,
+  onlyMine,
+  page = 1,
+  size = 5
+) => {
   const params = new URLSearchParams({ page, size })
 
   if (name) params.append("name", name)
@@ -13,17 +21,26 @@ const patientsListParams = (name, conclusions = [], sorting, scheduledVisits, on
   return params
 }
 
-const patientsInspectionParams = (grouped = false, icdRoots = [], page = 1, size = 5 ) => {
+const patientsInspectionParams = (
+  icdRoots = [],
+  grouped = false,
+  page = 1,
+  size = 5
+) => {
   const params = new URLSearchParams({ page, size })
 
-  if (grouped) params.append("grouped", grouped)
-  if (sorting) params.append("sorting", sorting)
-  if (onlyMine !== undefined) params.append("onlyMine", onlyMine)
-
-    icdRoots.forEach((icdRoot) => {
+  params.append("grouped", grouped)
+  icdRoots.forEach((icdRoot) => {
     params.append("icdRoots", icdRoot)
   })
   return params
 }
+const icdParams = (request, page = 1, size = 5) => {
+  const params = new URLSearchParams({ page, size })
 
-export {patientsListParams, patientsInspectionParams}
+  if (request) params.append("request", request)
+
+  return params
+}
+
+export { patientsListParams, patientsInspectionParams, icdParams }

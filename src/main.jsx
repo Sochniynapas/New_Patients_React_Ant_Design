@@ -9,6 +9,7 @@ import MainPage from "./MainPage.jsx"
 import Profile from "./components/Profile/Profile.jsx"
 import Patients from "./components/Patients/Patients.jsx"
 import PatientCard from "./components/PatientCard/PatientCard.jsx"
+import Inspection from "./components/PatientCard/InspectionElement.jsx"
 
 const router = createBrowserRouter([
   {

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import {
+  icdParams,
   patientsInspectionParams,
   patientsListParams,
 } from "../helpers/navigate"
@@ -39,15 +40,20 @@ export const patientsApi = createApi({
         page = 1,
         size = 5,
       }) => {
-        const params = patientsInspectionParams(grouped, icdRoots, page, size)
+        const params = patientsInspectionParams(icdRoots, grouped, page, size)
         return {
-          url: `api/patient/${id}?${params.toString()}`,
+          url: `api/patient/${id}/inspections?${params.toString()}`,
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       },
       providesTags: (result, id) => [{ type: "Inspections", id: "LIST" }],
+    }),
+    getIcdRoots: build.query({
+      query: () => ({
+        url: `api/dictionary/icd10/roots`,
+      }),
     }),
     getPatients: build.query({
       query: ({
@@ -86,5 +92,6 @@ export const {
   useGetPatientsQuery,
   useCreatePatientMutation,
   useGetPatientCardQuery,
-  useGetPatientsInspectionsListQuery
+  useGetPatientsInspectionsListQuery,
+  useGetIcdRootsQuery,
 } = patientsApi
