@@ -8,6 +8,7 @@ import Auth from "./components/Auth/Auth.jsx"
 import MainPage from "./MainPage.jsx"
 import Profile from "./components/Profile/Profile.jsx"
 import Patients from "./components/Patients/Patients.jsx"
+import PatientCard from "./components/PatientCard/PatientCard.jsx"
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/patients',
     element: <MainPage children = {Patients} />
+  },
+  {
+    path: '/patient/:id',
+    element: <MainPage children = {PatientCard} />
   },
 ])
 

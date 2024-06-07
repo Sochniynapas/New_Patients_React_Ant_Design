@@ -13,7 +13,7 @@ export const CONCLUSION_OPTIONS =[
     {value: "Death", label: "Смерть"}
 ]
 
-export const PATIENTS_COUNT_OPTIONS = [
+export const SIZE_OPTIONS = [
     {value: "1", label: "1"},
     {value: "2", label: "2"},
     {value: "3", label: "3"},
