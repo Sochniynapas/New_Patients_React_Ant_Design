@@ -16,5 +16,25 @@ const formatedGender = (gender) =>{
             return("Женский")
     }
 }
+const formatedConclusion = (conclusion) =>{
+    switch(conclusion){
+        case "Disease":
+            return("Болезнь")
+        case "Recovery":
+            return("Выздоровление")
+        case "Death":
+            return("Смерть")
+    }
+}
+const formatedDiagType = (type) =>{
+    switch(type){
+        case "Main":
+            return("Основной")
+        case "Concomitant":
+            return("Сопутствующий")
+        case "Complication ":
+            return("Осложнение")
+    }
+}
 
-export {formatedDate, formatedGender}
+export {formatedDate, formatedGender, formatedConclusion, formatedDiagType}

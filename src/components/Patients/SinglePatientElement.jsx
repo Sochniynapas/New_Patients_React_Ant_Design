@@ -1,14 +1,15 @@
 import { Card, Col, Form, Row, Typography } from "antd"
 import { formatedDate, formatedGender } from "../../helpers/formatters"
+import { useNavigate } from "react-router-dom"
 
 const Patient = (props) => {
     
-
   const { Title, Text } = Typography
+  const navigate = useNavigate()
   return (
     <Row style={{ marginTop: "30px" }} justify={"center"} align={"middle"}>
       <Col span={24}>
-        <Card className="form">
+        <Card onClick={()=>navigate(`/patient/${props.id}`)} className="form">
           <Title style={{ marginTop: "0px" }} level={4}>
             {props.name}
           </Title>

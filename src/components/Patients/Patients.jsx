@@ -10,12 +10,11 @@ import {
   Switch,
   Typography,
   Pagination,
-  Modal,
 } from "antd"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import {
   CONCLUSION_OPTIONS,
-  PATIENTS_COUNT_OPTIONS,
+  SIZE_OPTIONS,
   SORTING_OPTIONS,
 } from "../../helpers/constants"
 import { useEffect, useState } from "react"
@@ -184,7 +183,7 @@ const Patients = () => {
                     label="Число пациентов на странице"
                   >
                     <Select
-                      options={PATIENTS_COUNT_OPTIONS}
+                      options={SIZE_OPTIONS}
                       placeholder="Выберите число пациентов"
                     ></Select>
                   </Form.Item>
