@@ -16,12 +16,12 @@ import { useEffect, useState } from "react"
 import {
   useGetIcdRootsQuery,
   useGetPatientCardQuery,
-  useGetPatientsInspectionsListQuery,
 } from "../../api/patientsApi"
 import { formatedDate } from "../../helpers/formatters"
 import { ManOutlined, WomanOutlined } from "@ant-design/icons"
 import { patientsInspectionParams } from "../../helpers/navigate"
 import Inspection from "./InspectionElement"
+import { useGetPatientsInspectionsListQuery } from "../../api/inspectionsApi"
 
 const PatientCard = () => {
   const { Title, Text } = Typography
@@ -80,6 +80,11 @@ const PatientCard = () => {
     navigate(`/patient/${id}?${params.toString()}`)
   }
 
+  const handleCreateInspection = () =>{
+    localStorage.setItem("patient", id)
+    navigate("/inspection/create")
+  }
+
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("page", page)
@@ -134,7 +139,7 @@ const PatientCard = () => {
                 <Title>Медицинская карта пациента</Title>
               </Col>
               <Col>
-                <Button type="primary">Добавить осмотр</Button>
+                <Button type="primary" onClick={handleCreateInspection}>Добавить осмотр</Button>
               </Col>
             </Row>
             <Row justify={"space-between"} align={"middle"}>
