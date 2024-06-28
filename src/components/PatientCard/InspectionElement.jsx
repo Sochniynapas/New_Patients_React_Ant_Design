@@ -2,9 +2,11 @@ import { FormOutlined, SearchOutlined } from "@ant-design/icons"
 import { Card, Col, Row, Typography } from "antd"
 import Link from "antd/es/typography/Link"
 import { formatedConclusion, formatedDate } from "../../helpers/formatters"
+import { useNavigate } from "react-router-dom"
 
 const Inspection = (params) => {
   const { Title, Text } = Typography
+  const navigate = useNavigate()
   return (
     <Row style={{ paddingTop: "20px" }} justify={"center"} align={"middle"}>
       <Col span={24}>
@@ -55,7 +57,7 @@ const Inspection = (params) => {
                   />
                 </Col>
                 <Col>
-                  <Link style={{ fontSize: "16px" }}>Детали осмотра</Link>
+                  <Link onClick={()=>navigate(`/inspection/${params.id}`)} style={{ fontSize: "16px" }}>Детали осмотра</Link>
                 </Col>
               </Row>
             </Col>

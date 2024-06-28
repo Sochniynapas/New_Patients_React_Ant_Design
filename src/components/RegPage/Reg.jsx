@@ -36,7 +36,7 @@ const RegComponent = () => {
     return current && new Date(current) >= new Date()
   }
   const onFinish = async (values) => {
-    const formattedDate = values.birthday.toISOString()
+    const formattedDate = values.birthday.add(7, "hour").toISOString()
     const formattedValues = {
       ...values,
       birthday: formattedDate,

@@ -10,6 +10,7 @@ import Profile from "./components/Profile/Profile.jsx"
 import Patients from "./components/Patients/Patients.jsx"
 import PatientCard from "./components/PatientCard/PatientCard.jsx"
 import CreateInspection from "./components/Inspection/CreateInspection.jsx"
+import InspectionDetails from "./components/Inspection/InspectionDetails.jsx"
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/inspection/create',
     element: <MainPage children = {CreateInspection} />
+  },
+  {
+    path: '/inspection/:id',
+    element: <MainPage children = {InspectionDetails} />
   },
 ])
 

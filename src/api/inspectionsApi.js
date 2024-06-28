@@ -47,6 +47,14 @@ export const inspectionsApi = createApi({
                 }
             }),
             providesTags: (result, id) => [{ type: "Inspections", id: "LIST" }],
+        }),
+        getInspectionDetails: build.query({
+            query: ({id, token}) => ({
+                url: `api/inspection/${id}`,
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }),
         })
 
   })
@@ -55,5 +63,6 @@ export const inspectionsApi = createApi({
 export const {
     useCreateInspectionMutation,
     useGetPatientsInspectionsListQuery,
-    useGetPrevInspectionsListQuery
+    useGetPrevInspectionsListQuery,
+    useGetInspectionDetailsQuery
   } = inspectionsApi
