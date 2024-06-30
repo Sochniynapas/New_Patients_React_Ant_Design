@@ -242,7 +242,7 @@ const CreateInspection = () => {
       token: localStorage.getItem("token"),
     })
     if (response && response.error) {
-      if ((response.error.status = 401)) {
+      if ((response.error.status === 401)) {
         localStorage.clear()
         navigate('/login')
       } else {

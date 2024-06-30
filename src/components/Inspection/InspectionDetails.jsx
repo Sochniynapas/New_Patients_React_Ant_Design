@@ -1,6 +1,6 @@
 import { Button, Card, Col, Row, Typography } from "antd"
 import { useGetInspectionDetailsQuery } from "../../api/inspectionsApi"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
   formatedConclusion,
@@ -9,7 +9,9 @@ import {
   formatedDiagType,
   formatedGender,
 } from "../../helpers/formatters"
-import TextArea from "antd/es/input/TextArea"
+import SingleConsult from "./SingleConsult"
+import RedactInspectionModal from "./RedactInspectionDetailsModal"
+import { useGetProfileQuery } from "../../api/userApi"
 
 const InspectionDetails = () => {
   const { Title, Text } = Typography
@@ -17,6 +19,9 @@ const InspectionDetails = () => {
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
   const { id } = useParams()
+
+  const { data: profileData } = useGetProfileQuery({token: token})
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data: details, error: detailsError } = useGetInspectionDetailsQuery({
     id: id,
@@ -44,7 +49,16 @@ const InspectionDetails = () => {
                 <Title style={{ marginTop: 0 }} level={2}>
                   Амбулаторный осмотр от: {formatedDateWithTime(details.date)}
                 </Title>
-                <Button type="primary">Редактировать осмотр</Button>
+                {profileData.id === details.doctor.id && (
+                  <Button onClick={() => setIsModalOpen(true)} type="primary">
+                    Редактировать осмотр
+                  </Button>
+                )}
+                <RedactInspectionModal
+                  setIsModalOpen={setIsModalOpen}
+                  isModalOpen={isModalOpen}
+                  details={details}
+                />
               </Row>
               <Title style={{ marginTop: 0 }} level={4}>
                 Пациент: {details.patient.name}
@@ -75,6 +89,12 @@ const InspectionDetails = () => {
               </Title>
               <Text>{details.anamnesis}</Text>
             </Card>
+            {details.consultations &&
+              details.consultations.map((elem, index) => (
+                <Col span={24}>
+                  <SingleConsult key={index} details={elem} />
+                </Col>
+              ))}
             {details.diagnoses && (
               <Card style={{ marginTop: "20px" }} className="form">
                 <Title style={{ marginTop: 0 }} level={2}>
@@ -124,7 +144,8 @@ const InspectionDetails = () => {
                     </Text>
                   ) : (
                     <Text>
-                      Дата следующего визита: {formatedDateWithTime(details.nextVisitDate)}
+                      Дата следующего визита:{" "}
+                      {formatedDateWithTime(details.nextVisitDate)}
                     </Text>
                   )}
                 </>
