@@ -13,17 +13,18 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { SIZE_OPTIONS } from "../../helpers/constants"
 import { useEffect, useState } from "react"
-import {
-  useGetIcdRootsQuery,
-} from "../../api/patientsApi"
+import { useGetIcdRootsQuery } from "../../api/patientsApi"
 import { consultationsParams } from "../../helpers/navigate"
 import { useGetConsultationsListQuery } from "../../api/consultations"
 import InspectionForConsult from "./SingleInspectOnConsultPage"
+import { useGetInspectionsChainQuery } from "../../api/inspectionsApi"
 
 const ConsultationsPage = () => {
   const { Title, Text } = Typography
   const [searchParams] = useSearchParams()
 
+
+  const token = localStorage.getItem("token")
   const navigate = useNavigate()
 
   const icdRoots = searchParams.getAll("icdRoots")
@@ -39,8 +40,6 @@ const ConsultationsPage = () => {
   }
 
   const { data: icdRootsArray, error: icdError } = useGetIcdRootsQuery()
-
-  
 
   const { data: consultations, error: consultationsError } =
     useGetConsultationsListQuery({
@@ -73,7 +72,6 @@ const ConsultationsPage = () => {
     navigate(`/consultations?${params.toString()}`)
   }
 
-
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("page", page)
@@ -98,8 +96,10 @@ const ConsultationsPage = () => {
         setHasError(true)
       }
     } else {
-      console.log(consultations)
-      setHasError(false)
+      if (consultations) {
+        console.log(consultations)
+        setHasError(false)
+      }
     }
   }, [consultations, navigate, consultationsError])
 
