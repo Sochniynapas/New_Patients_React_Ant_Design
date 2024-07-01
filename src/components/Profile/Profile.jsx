@@ -23,7 +23,7 @@ const Profile = () => {
   const [editProfile] = useEditProfileMutation()
 
   const onFinish = async (values) => {
-    const formattedDate = values.birthday.toISOString()
+    const formattedDate = values.birthday.add(7, "hour").toISOString()
     const formattedValues = {
       ...values,
       birthday: formattedDate,

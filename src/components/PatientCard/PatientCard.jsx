@@ -89,7 +89,7 @@ const PatientCard = () => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("page", page)
     
-    navigate(`/patient/${id}/${params.toString()}`)
+    navigate(`/patient/${id}?${params.toString()}`)
     setCurrentPage(page)
   }
 
@@ -228,6 +228,7 @@ const PatientCard = () => {
                 {inspections.inspections.map((elem) => (
                   <Inspection
                     key={elem.id}
+                    id={elem.id}
                     date={elem.date}
                     conclusion={elem.conclusion}
                     diagnosisName={elem.diagnosis.name}

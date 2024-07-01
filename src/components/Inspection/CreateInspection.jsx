@@ -58,6 +58,8 @@ const CreateInspection = () => {
     deathDate: "",
   })
 
+  const [responseError, setResponseError] = useState(false)
+
   const navigate = useNavigate()
 
   const { data: patient, error: patientError } = useGetPatientCardQuery({
@@ -212,11 +214,13 @@ const CreateInspection = () => {
   const disableFutureDates = (current) => {
     return current && new Date(current) >= new Date()
   }
+  const disablePreviousDates = (current) => {
+    return current && new Date(current) < new Date()
+  }
 
   const onFinish = async (values) => {
     const data = {}
-
-    data["date"] = values.date.toISOString()
+    data["date"] = values.date.add(7, "hour").toISOString()
     data["anamnesis"] = values.anamnesis
     data["complaints"] = values.complaints
     data["treatment"] = values.treatment
@@ -237,12 +241,17 @@ const CreateInspection = () => {
       data: data,
       token: localStorage.getItem("token"),
     })
-    if (response) {
-      navigate(`/patient/${localStorage.getItem("patient")}`)
-    } else {
-      if (response.status === 401) {
+    if (response && response.error) {
+      if ((response.error.status === 401)) {
         localStorage.clear()
-        navigate("/profile")
+        navigate('/login')
+      } else {
+        setResponseError(true)
+      }
+    } else {
+      if (response.data) {
+        setResponseError(false)
+        navigate(`/patient/${localStorage.getItem("patient")}`)
       }
     }
   }
@@ -276,7 +285,7 @@ const CreateInspection = () => {
   return (
     <Row justify={"center"} align={"middle"}>
       <Col xl={14} md={16} xs={20}>
-        <Title>Созданте осмотра</Title>
+        <Title>Создание осмотра</Title>
         <Form
           onFinish={onFinish}
           initialValues={{ remember: true }}
@@ -337,6 +346,7 @@ const CreateInspection = () => {
                   label={"Дата осмотра"}
                   name={"date"}
                   labelCol={{ span: 24 }}
+                  rules={[{ required: true }]}
                 >
                   <DatePicker
                     style={{ width: "100%" }}
@@ -486,9 +496,34 @@ const CreateInspection = () => {
                       handleChangeDiagParams("type", e.target.value)
                     }
                   >
-                    <Radio value={"Main"}>Основной</Radio>
-                    <Radio value={"Concomitant"}>Сопутствующий</Radio>
-                    <Radio value={"Complication "}>Осложнение</Radio>
+                    <Radio
+                      disabled={diagnosis.some(
+                        (diagnosis) => diagnosis.type === "Main"
+                      )}
+                      value={"Main"}
+                    >
+                      Основной
+                    </Radio>
+                    <Radio
+                      disabled={
+                        !diagnosis.some(
+                          (diagnosis) => diagnosis.type === "Main"
+                        )
+                      }
+                      value={"Concomitant"}
+                    >
+                      Сопутствующий
+                    </Radio>
+                    <Radio
+                      disabled={
+                        !diagnosis.some(
+                          (diagnosis) => diagnosis.type === "Main"
+                        )
+                      }
+                      value={"Complication "}
+                    >
+                      Осложнение
+                    </Radio>
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -522,6 +557,7 @@ const CreateInspection = () => {
               {conclusion !== "Recovery" && (
                 <Col span={8}>
                   <Form.Item
+                    rules={[{ required: true }]}
                     label={
                       conclusion === "Death"
                         ? "Дата и время смерти"
@@ -532,15 +568,19 @@ const CreateInspection = () => {
                     <DatePicker
                       onChange={(e) => {
                         conclusion === "Death"
-                          ? handleSetDateValues("deathDate", e.toISOString())
+                          ? handleSetDateValues(
+                              "deathDate",
+                              e.add(7, "hour").toISOString()
+                            )
                           : handleSetDateValues(
                               "nextVisitDate",
-                              e.toISOString()
+                              e.add(7, "hour").toISOString()
                             )
                       }}
                       placeholder="Выберите дату"
                       style={{ width: "100%" }}
                       showTime
+                      disabledDate={disablePreviousDates}
                       format="DD.MM.YYYY HH:mm"
                     />
                   </Form.Item>
@@ -548,6 +588,13 @@ const CreateInspection = () => {
               )}
             </Row>
           </Card>
+          {responseError && (
+            <Row justify={"center"}>
+              <Title level={3} type="danger">
+                Проверьте корректность введённых полей
+              </Title>
+            </Row>
+          )}
           <Row
             style={{ paddingTop: "20px", paddingBottom: "20px" }}
             gutter={20}
