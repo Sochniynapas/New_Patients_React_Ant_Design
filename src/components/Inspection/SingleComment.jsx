@@ -19,12 +19,17 @@ const SingleComment = ({ comment, id }) => {
   const onAddCommentFinish = async (values) => {
     const data = { content: values.textComment, parentId: comment.id };
     const response = await postNewCom({ data, id: id, token });
-    if (!response.error) {
+    if (response.error) {
       if(response.error.status === 401){
         localStorage.clear()
         navigate("/login")
       }
-      setAddComment(false);
+      setAddComment(false)
+    }
+    else{
+      if(response.data){
+        setAddComment(false)
+      }
     }
   };
 
