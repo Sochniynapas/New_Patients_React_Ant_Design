@@ -49,6 +49,19 @@ export const inspectionsApi = createApi({
       },
       providesTags: (result, id) => [{ type: "Inspections", id: "LIST" }],
     }),
+    getInspectionsChain: build.query({
+      query: ({
+        token,
+        id
+      }) => {
+        return {
+          url: `api/inspection${id}/chain`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      },
+    }),
     getPrevInspectionsList: build.query({
       query: ({ id, request = "", token }) => ({
         url: `api/patient/${id}/inspections/search?request=${request}`,
@@ -109,5 +122,6 @@ export const {
   useGetConsultationDetailsQuery,
   usePostNewCommentMutation,
   useRedactCommentMutation,
-  useRedactInspectionMutation
+  useRedactInspectionMutation,
+  useGetInspectionsChainQuery
 } = inspectionsApi
