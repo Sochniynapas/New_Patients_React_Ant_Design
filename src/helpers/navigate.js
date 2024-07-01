@@ -35,6 +35,20 @@ const patientsInspectionParams = (
   })
   return params
 }
+const consultationsParams = (
+  icdRoots = [],
+  grouped = false,
+  page = 1,
+  size = 5
+) => {
+  const params = new URLSearchParams({ page, size })
+
+  params.append("grouped", grouped)
+  icdRoots.forEach((icdRoot) => {
+    params.append("icdRoots", icdRoot)
+  })
+  return params
+}
 const icdParams = (request, page = 1, size = 5) => {
   const params = new URLSearchParams({ page, size })
 
@@ -43,4 +57,4 @@ const icdParams = (request, page = 1, size = 5) => {
   return params
 }
 
-export { patientsListParams, patientsInspectionParams, icdParams }
+export { patientsListParams, patientsInspectionParams, icdParams, consultationsParams }

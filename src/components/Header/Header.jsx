@@ -93,7 +93,7 @@ const HeaderComponent = () => {
               </Link>
             </Col>
             <Col>
-              <Link style={{ color: "white" }}>Консультации</Link>
+              <Link onClick={() => navigate("/consultations")} style={{ color: "white" }}>Консультации</Link>
             </Col>
             <Col>
               <Link style={{ color: "white" }}>Отчёты и статистика</Link>

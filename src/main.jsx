@@ -11,6 +11,7 @@ import Patients from "./components/Patients/Patients.jsx"
 import PatientCard from "./components/PatientCard/PatientCard.jsx"
 import CreateInspection from "./components/Inspection/CreateInspection.jsx"
 import InspectionDetails from "./components/Inspection/InspectionDetails.jsx"
+import ConsultationsPage from "./components/Consultation/ConsultationsPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/inspection/:id',
     element: <MainPage children = {InspectionDetails} />
+  },
+  {
+    path: '/consultations',
+    element: <MainPage children = {ConsultationsPage} />
   },
 ])
 
